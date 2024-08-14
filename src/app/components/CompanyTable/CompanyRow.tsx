@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Image from 'next/image';
-import StatusLabel, { Status } from './StatusLabel';
+import StatusLabel, { Status } from '../StatusLabel';
 
 export interface CompanyRowProps {
     id: number;

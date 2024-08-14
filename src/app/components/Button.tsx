@@ -1,13 +1,14 @@
 'use client';
 
 import clsx from 'clsx';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ReactNode } from 'react';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     disabled?: boolean;
+    children?: ReactNode;
 }
 
-const Button = ({ disabled, ...rest }: Props) => {
+const Button = ({ disabled, children, ...rest }: Props) => {
     return (
         <button
             {...rest}
@@ -19,7 +20,7 @@ const Button = ({ disabled, ...rest }: Props) => {
                 },
             )}
         >
-            Button
+            {children ? children : 'Button'}
         </button>
     );
 };
