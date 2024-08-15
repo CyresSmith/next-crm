@@ -13,7 +13,7 @@ const labelByStat = {
 };
 
 export default async function Page({}: PageProps) {
-    const data = await getSummaryStats();
+    const data = await getSummaryStats({ next: { revalidate: 5 } });
 
     return (
         <div className="grid grid-cols-12 gap-5">

@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import type React from 'react';
+import Providers from './components/providers';
 import './globals.css';
 {
 }
@@ -12,7 +13,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={font.className}>{children}</body>
+            <body className={font.className}>
+                <Providers>{children}</Providers>
+            </body>
         </html>
     );
 }
