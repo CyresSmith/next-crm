@@ -32,11 +32,12 @@ export enum CompanyStatus {
 
 export interface Company {
     id: string;
+    hasPromotions: boolean;
+
     title: string;
     description: string;
     status: CompanyStatus;
     joinedDate: string;
-    hasPromotions: boolean;
     categoryId: string;
     categoryTitle: string;
     countryId: string;
@@ -100,4 +101,30 @@ export const getPromotions = async (params: Record<string, string> = {}, init?: 
         `${buildUrl('promotions')}?${stringifyQueryParams(params)}`,
         init,
     );
+};
+
+export const createCompany = async (
+    data: Omit<Company, 'id' | 'hasPromotions'>,
+    init?: RequestInit,
+) => {
+    return sendRequest<Company>(buildUrl('companies'), {
+        ...init,
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            ...(init && init.headers),
+            'content-type': 'application/json',
+        },
+    });
+};
+
+export const createPromotion = async (data: Omit<Promotion, 'id'>, init?: RequestInit) => {
+    return sendRequest<Promotion>(buildUrl('promotions'), {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            ...(init && init.headers),
+            'content-type': 'application/json',
+        },
+    });
 };

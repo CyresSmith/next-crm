@@ -1,5 +1,7 @@
 'use client';
 
+import { Company, CompanyStatus, createCompany } from '@/lib/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
 import Button from '../Button';
 import InputField from '../InputField';
@@ -23,13 +25,43 @@ const initialValues: CompanyFieldValues = {
     description: '',
 };
 
-export interface CompanyFormProps {
-    onSubmit: (values: CompanyFieldValues) => void | Promise<void>;
+export interface Props {
+    onSubmit?: () => void | Promise<void>;
 }
 
-export default function CompanyForm({ onSubmit }: CompanyFormProps) {
+export default function CompanyForm({ onSubmit }: Props) {
+    const queryClient = useQueryClient();
+
+    const { mutateAsync, isPending } = useMutation({
+        mutationFn: createCompany,
+        onSuccess: (data) => {
+            queryClient.setQueryData(['companies'], (prev: Company[]) => {
+                if (prev) {
+                    return prev.concat(data);
+                } else {
+                    return data;
+                }
+            });
+        },
+    });
+
+    const handleSubmit = async (values: CompanyFieldValues) => {
+        await mutateAsync({
+            ...values,
+            title: values.name,
+            joinedDate: values.date,
+            status: CompanyStatus.Active,
+            categoryId: '1',
+            categoryTitle: values.category,
+            countryId: '1',
+            countryTitle: values.country,
+        });
+
+        onSubmit && onSubmit();
+    };
+
     return (
-        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             <Form className="flex flex-col gap-10">
                 <p className="mb-0.5 text-xl">Add new company</p>
 
